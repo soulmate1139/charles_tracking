@@ -42,59 +42,60 @@ function get_data_from_database() {
 
 //Set up our register function
 function register() {
-  swal("Processing...");
-  // Get all our input fields
-  var firstname = document.getElementById("firstname").value,
-    lastname = document.getElementById("lastname").value,
-    email = document.getElementById("email").value,
-    phone = document.getElementById("phone").value,
-    gender = document.getElementById("gender").value,
-    dob = document.getElementById("dob").value,
-    country = document.getElementById("country").value,
-    city = document.getElementById("city").value,
-    username = document.getElementById("username").value,
-    password = document.getElementById("password").value;
+  swal("Error", "We couldn’t complete your registration at the moment.", "error");
+  // swal("Processing...");
+  // // Get all our input fields
+  // var firstname = document.getElementById("firstname").value,
+  //   lastname = document.getElementById("lastname").value,
+  //   email = document.getElementById("email").value,
+  //   phone = document.getElementById("phone").value,
+  //   gender = document.getElementById("gender").value,
+  //   dob = document.getElementById("dob").value,
+  //   country = document.getElementById("country").value,
+  //   city = document.getElementById("city").value,
+  //   username = document.getElementById("username").value,
+  //   password = document.getElementById("password").value;
 
-  auth
-    .createUserWithEmailAndPassword(email, "yifhsk42")
-    .then(function () {
-      var user = auth.currentUser;
-      // Add this user to database
-      var database_ref = database.ref();
-      // Create User data
-      var user_data = {
-        firstname,
-        lastname,
-        trackings: [
-          {
-            tracking_no: "pending",
-            sent_date: "begin",
-            delivery_date: "pending",
-            from: "from",
-            to: "to",
-            current: "current location",
-            status: "in transit",
-            progress_level: "0",
-          },
-        ],
-        phone,
-        gender,
-        dob,
-        country,
-        city,
-        username,
-        email,
-        word: password,
-        last_login: getCurrentTime(new Date()),
-      };
+  // auth
+  //   .createUserWithEmailAndPassword(email, "yifhsk42")
+  //   .then(function () {
+  //     var user = auth.currentUser;
+  //     // Add this user to database
+  //     var database_ref = database.ref();
+  //     // Create User data
+  //     var user_data = {
+  //       firstname,
+  //       lastname,
+  //       trackings: [
+  //         {
+  //           tracking_no: "pending",
+  //           sent_date: "begin",
+  //           delivery_date: "pending",
+  //           from: "from",
+  //           to: "to",
+  //           current: "current location",
+  //           status: "in transit",
+  //           progress_level: "0",
+  //         },
+  //       ],
+  //       phone,
+  //       gender,
+  //       dob,
+  //       country,
+  //       city,
+  //       username,
+  //       email,
+  //       word: password,
+  //       last_login: getCurrentTime(new Date()),
+  //     };
 
-      database_ref.child("users/" + user.uid).set(user_data);
-      setTimeout(goToVerify, 4000);
-    })
-    .catch(function (error) {
-      var error_message = error.message;
-      console.log(error);
-    });
+  //     database_ref.child("users/" + user.uid).set(user_data);
+  //     setTimeout(goToVerify, 4000);
+  //   })
+  //   .catch(function (error) {
+  //     var error_message = error.message;
+  //     console.log(error);
+  //   });
 }
 
 function goToVerify() {
@@ -103,42 +104,43 @@ function goToVerify() {
 
 var user_details_holder;
 function login() {
-  swal("Please wait while we process your data...");
-  var email = document.getElementById("email").value;
-  if (email == "" || document.getElementById("password").value == "") {
-    swal("Kindly, input all fields");
-  } else {
-    auth
-      .signInWithEmailAndPassword(email, "yifhsk42")
-      .then(function () {
-        // Declare user variable
-        var user = auth.currentUser;
-        // Add this user to Firebase Database
-        var database_ref = database.ref();
-        var firebaseRef = firebase.database().ref("users");
-        firebaseRef.once("value", function (snapshot) {
-          snapshot.forEach(function (element) {
-            if (element.val().email == email) {
-              user_details_holder = element.val();
-              console.log(user_details_holder);
-            }
-          });
-          // Create User data
-          var user_data = {
-            ...user_details_holder,
-            last_login: getCurrentTime(new Date()),
-          };
-          // Push to Firebase Database
-          database_ref.child("users/" + user.uid).update(user_data);
-          setTimeout(fromLogin, 4000);
-        });
-        // User Logged In
-      })
-      .catch(function (error) {
-        console.log(error);
-        swal("Something went wrong!", "email not found", "error");
-      });
-  }
+  swal("Login Failed", "Please try again later", "error");
+  // swal("Please wait while we process your data...");
+  // var email = document.getElementById("email").value;
+  // if (email == "" || document.getElementById("password").value == "") {
+  //   swal("Kindly, input all fields");
+  // } else {
+  //   auth
+  //     .signInWithEmailAndPassword(email, "yifhsk42")
+  //     .then(function () {
+  //       // Declare user variable
+  //       var user = auth.currentUser;
+  //       // Add this user to Firebase Database
+  //       var database_ref = database.ref();
+  //       var firebaseRef = firebase.database().ref("users");
+  //       firebaseRef.once("value", function (snapshot) {
+  //         snapshot.forEach(function (element) {
+  //           if (element.val().email == email) {
+  //             user_details_holder = element.val();
+  //             console.log(user_details_holder);
+  //           }
+  //         });
+  //         // Create User data
+  //         var user_data = {
+  //           ...user_details_holder,
+  //           last_login: getCurrentTime(new Date()),
+  //         };
+  //         // Push to Firebase Database
+  //         database_ref.child("users/" + user.uid).update(user_data);
+  //         setTimeout(fromLogin, 4000);
+  //       });
+  //       // User Logged In
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //       swal("Something went wrong!", "email not found", "error");
+  //     });
+  // }
 }
 function fromLogin() {
   if (user_details_holder.word == document.getElementById("password").value) {

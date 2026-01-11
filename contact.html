@@ -246,7 +246,7 @@
                                 <h4>Email</h4>
                                 <p>granttrustsec@fastservice.com</p>
                                 <h4>Phone</h4>
-                                <p class="mb-0">+61 480006307</p>
+                                <p class="mb-0">+61 480 006 307</p>
                                 <p></p>
                             </div>
                         </div>
@@ -258,33 +258,33 @@
                                     Please fill out this form to contact us
                                 </h3>
                                 <hr />
-                                <form name="contact" action="php/send.php" method="post">
+                                <form id="contactForm">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="userName" class="form-control" placeholder="Name" required />
+                                                <input type="text" id="userName" class="form-control" placeholder="Name" required />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="email" class="form-control" placeholder="E-mail" required />
+                                                <input type="email" id="email" class="form-control" placeholder="E-mail" required />
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <input type="text" name="subject" class="form-control" placeholder="Subject" />
+                                                <input type="text" id="subject" class="form-control" placeholder="Subject" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <textarea name="msg" class="form-control" placeholder="Message" required></textarea>
+                                                <textarea id="msg" class="form-control" placeholder="Message" required></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <input type="submit" name="submit" value="Submit" class="btn btn-outline-danger btn-block" />
+                                                <button type="submit" class="btn btn-outline-danger btn-block">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -353,7 +353,7 @@
                                 <p class="text-white"></p>
                             </li>
                             <li>
-                                <p class="text-white mb-0">+61 480006307</p>
+                                <p class="text-white mb-0">+61 480 006 307</p>
                                 <p class="text-white mb-0"></p>
                                 <p>granttrustsec@fastservice.com</p>
                             </li>
@@ -386,6 +386,29 @@
         $(document).ready(function () {
             // Get the current year for the copyright
             $("#year").text(new Date().getFullYear());
+
+            // Handle contact form submission with mailto
+            $("#contactForm").on("submit", function(e) {
+                e.preventDefault();
+                
+                var name = $("#userName").val();
+                var email = $("#email").val();
+                var subject = $("#subject").val() || "Contact Form Submission";
+                var message = $("#msg").val();
+                
+                // Build the email body
+                var body = "Name: " + name + "%0D%0A";
+                body += "Email: " + email + "%0D%0A%0D%0A";
+                body += "Message:%0D%0A" + encodeURIComponent(message);
+                
+                // Create mailto link
+                var mailtoLink = "mailto:granttrustsec@fastservice.com" +
+                                "?subject=" + encodeURIComponent(subject) +
+                                "&body=" + body;
+                
+                // Open mail client
+                window.location.href = mailtoLink;
+            });
 
             //Initial testimonial
             $(".slider").slick({
