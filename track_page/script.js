@@ -39,30 +39,46 @@ const firebaseConfig = {
     }
 
     function tracker() {
-        if (document.getElementById("tracking_no").value !== "") {
-            swal("Processing...");
-            GotoDetails();
-        }
+  if (document.getElementById("tracking_no").value !== "") {
+    swal({
+      title: "Processing",
+      text: "Please wait…",
+      buttons: false,
+      closeOnClickOutside: false,
+      closeOnEsc: false
+    });
+
+    GotoDetails();
+  }
+}
+
+function GotoDetails() {
+  var user_data = user_details_holder;
+  var trackers = user_data.trackers;
+  var inputCode = document.getElementById("tracking_no").value;
+  var isFound = false;
+
+  trackers.forEach((element) => {
+    if (element.tracking_no == inputCode) {
+      isFound = true;
+
+      sessionStorage.setItem("track_id", element.tracking_no);
+      sessionStorage.setItem("status", element.status);
+      sessionStorage.setItem("progress", "In Transit");
+      sessionStorage.setItem("reciever_name", element.full_name);
+      sessionStorage.setItem("reciever_addr", element.address);
+      sessionStorage.setItem("progress_bar", element.progress);
+      sessionStorage.setItem("status_color", element.color);
+      sessionStorage.setItem("progress_color", element.color);
+      sessionStorage.setItem("arrival_date", element.arrival_date);
+
+      swal.close(); // close loader before redirect
+      window.location = "track_page/track.html";
     }
+  });
 
-    function GotoDetails(){
-        var user_data = user_details_holder;//localStorage.getItem(("user_details_holder"));
-        var trackers = user_data.trackers;
-
-
-        trackers.forEach(element => {
-            if(element.tracking_no == document.getElementById("tracking_no").value){
-                sessionStorage.setItem("track_id", element.tracking_no);
-                sessionStorage.setItem("status", element.status);
-                sessionStorage.setItem("progress", "In Transit");
-                sessionStorage.setItem("reciever_name", element.full_name);
-                sessionStorage.setItem("reciever_addr", element.address);
-                sessionStorage.setItem("progress_bar", element.progress);
-                sessionStorage.setItem("status_color", element.color);
-                sessionStorage.setItem("progress_color", element.color);
-                sessionStorage.setItem("arrival_date", element.arrival_date);
-                window.location = "track_page/track.html";
-            }
-        });
-        document.getElementById("wrong_code_indicator").style.display = "block";
-    }
+  if (!isFound) {
+    swal.close();
+    swal("Error", "Invalid tracking number", "error");
+  }
+}
